@@ -1,0 +1,54 @@
+{
+    "name": "justinmoh/laravel-helper",
+    "description": "Collection of reusable code blocks in Laravel project developments",
+    "keywords": [
+        "justinmoh",
+        "laravel-helper"
+    ],
+    "homepage": "https://github.com/justinmoh/laravel-helper",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Justin Moh",
+            "email": "me@justinmoh.my",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.2.5",
+        "illuminate/support": "^7.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^5.0",
+        "phpunit/phpunit": "^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Justinmoh\\LaravelHelper\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Justinmoh\\LaravelHelper\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Justinmoh\\LaravelHelper\\LaravelHelperServiceProvider"
+            ],
+            "aliases": {
+                "LaravelHelper": "Justinmoh\\LaravelHelper\\LaravelHelperFacade"
+            }
+        }
+    }
+}
