@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Log;
 use Monolog\Logger;
 
 /**
+ * Allows output to console at log to log file at the same time. Specify log
+ * channel with `setLogChannel()` method if necessary.
+ *
  * Trait ConsoleLogger
  * @package Justinmoh\LaravelHelper\Traits
  *
@@ -13,6 +16,10 @@ use Monolog\Logger;
  */
 trait ConsoleLogger
 {
+    /** @var string $loggerChannel */
+    private $loggerChannel;
+
+
     /**
      * @param  string  $message
      * @param  int  $level
@@ -20,7 +27,9 @@ trait ConsoleLogger
     protected function log($message, int $level = Logger::INFO): void
     {
         $this->line($message, $this->getLogLevelText($level));
-        Log::channel($this->loggerChannel)->log($this->getLogLevelText($level, false), $message);
+
+        Log::channel($this->getLogChannel())
+            ->log($this->getLogLevelText($level, false), $message);
     }
 
 
@@ -52,5 +61,23 @@ trait ConsoleLogger
         }
 
         return '';
+    }
+
+
+    /**
+     * @param  string  $laravelLogChannel
+     */
+    protected function setLogChannel(string $laravelLogChannel): void
+    {
+        $this->loggerChannel = $laravelLogChannel;
+    }
+
+
+    /**
+     * @return string|null
+     */
+    private function getLogChannel()
+    {
+        return $this->loggerChannel;
     }
 }
