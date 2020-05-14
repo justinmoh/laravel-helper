@@ -17,6 +17,7 @@
     ],
     "require": {
         "php": "^7.2.5",
+        "illuminate/log": "^7.0 || ^6.0",
         "illuminate/support": "^7.0 || ^6.0"
     },
     "require-dev": {
