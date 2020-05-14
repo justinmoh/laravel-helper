@@ -49,7 +49,7 @@ trait ConsoleLogger
             case Logger::NOTICE:
                 return $forConsole ? 'info' : 'notice';
             case Logger::WARNING:
-                return 'warning';
+                return $forConsole ? 'warn' : 'warning';
             case Logger::ERROR:
                 return 'error';
             case Logger::CRITICAL:
