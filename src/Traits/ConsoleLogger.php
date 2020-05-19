@@ -32,7 +32,14 @@ trait ConsoleLogger
     {
         $message = implode(' ', [$this->getScriptStats($withPeak), $message]);
 
-        $this->line($message, $this->getLogLevelText($level));
+        /**
+         * @see \Illuminate\Console\Command::comment()
+         * @see \Illuminate\Console\Command::info()
+         * @see \Illuminate\Console\Command::warn()
+         * @see \Illuminate\Console\Command::error()
+         * @see \Illuminate\Console\Command::alert()
+         */
+        $this->{$this->getLogLevelText($level)}($message);
 
         Log::channel($this->getLogChannel())->log($this->getLogLevelText($level, false), $message);
     }
@@ -65,7 +72,7 @@ trait ConsoleLogger
                 return $forConsole ? 'alert' : 'emergency';
         }
 
-        return '';
+        return 'info';
     }
 
 
