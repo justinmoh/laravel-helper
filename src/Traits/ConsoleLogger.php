@@ -22,6 +22,9 @@ trait ConsoleLogger
     /** @var float $startTime */
     private $startTime;
 
+    /** @var bool $withStats */
+    private $withStats = false;
+
 
     /**
      * @param  string  $message
@@ -30,7 +33,8 @@ trait ConsoleLogger
      */
     protected function log(string $message, int $level = Logger::INFO, bool $withPeak = false): void
     {
-        $message = implode(' ', [$this->getScriptStats($withPeak), $message]);
+        $stats = $this->withStats ? $this->getScriptStats($withPeak) : null;
+        $message = implode(' ', array_filter([$stats, $message]));
 
         /**
          * @see \Illuminate\Console\Command::comment()
@@ -42,6 +46,18 @@ trait ConsoleLogger
         $this->{$this->getLogLevelText($level)}($message);
 
         Log::channel($this->getLogChannel())->log($this->getLogLevelText($level, false), $message);
+    }
+
+
+    public function enableLogStats(): void
+    {
+        $this->withStats = true;
+    }
+
+
+    public function disableLogStats(): void
+    {
+        $this->withStats = false;
     }
 
 
