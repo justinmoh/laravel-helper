@@ -2,6 +2,7 @@
 
 namespace Justinmoh\LaravelHelper\Traits;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Monolog\Logger;
 
@@ -25,6 +26,9 @@ trait ConsoleLogger
     /** @var bool $withStats */
     private $withStats = false;
 
+    private $toCache = false;
+    public $cacheName = 'console-message-logger';
+
 
     /**
      * @param  string  $message
@@ -46,6 +50,48 @@ trait ConsoleLogger
         $this->{$this->getLogLevelText($level)}($message);
 
         Log::channel($this->getLogChannel())->log($this->getLogLevelText($level, false), $message);
+        if ($this->toCache === true) {
+            $message = "[".now()->format('H:i:s')."]".$message;
+            $ttl = 60 * 60 * 24;
+            if (Cache::has($this->cacheName)) {
+                Cache::put($this->cacheName, Cache::get($this->cacheName).PHP_EOL.$message, $ttl);
+            } else {
+                Cache::put($this->cacheName, $message, $ttl);
+            }
+        }
+    }
+
+
+    public function setCacheName($name): void
+    {
+        $this->cacheName = $name;
+    }
+
+
+    public function getCacheName(): string
+    {
+        return $this->cacheName;
+    }
+
+
+    public function clearLogCache(): void
+    {
+        Cache::forget($this->cacheName);
+    }
+
+
+    public function enableLogToCache(?string $name = null): void
+    {
+        $this->toCache = true;
+        if ($name) {
+            $this->setCacheName($name);
+        }
+    }
+
+
+    public function disableLogToCache(): void
+    {
+        $this->toCache = false;
     }
 
 
