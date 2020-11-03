@@ -81,11 +81,14 @@ trait ConsoleLogger
     }
 
 
-    public function enableLogToCache(?string $name = null): void
+    public function enableLogToCache(?string $name = null, ?int $cacheTtl = null): void
     {
         $this->toCache = true;
         if ($name) {
             $this->setCacheName($name);
+        }
+        if ($cacheTtl > 0) {
+            $this->cacheTtl = $cacheTtl;
         }
     }
 
