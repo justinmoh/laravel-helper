@@ -28,6 +28,7 @@ trait ConsoleLogger
 
     private $toCache = false;
     public $cacheName = 'console-message-logger';
+    public $cacheTtl = 60 * 60 * 24;
 
 
     /**
@@ -51,8 +52,8 @@ trait ConsoleLogger
 
         Log::channel($this->getLogChannel())->log($this->getLogLevelText($level, false), $message);
         if ($this->toCache === true) {
-            $message = "[".now()->format('H:i:s')."]".$message;
-            $ttl = 60 * 60 * 24;
+            $message = "[".now()->format('Y-m-d H:i:s')."]".$message;
+            $ttl = $this->cacheTtl;
             if (Cache::has($this->cacheName)) {
                 Cache::put($this->cacheName, Cache::get($this->cacheName).PHP_EOL.$message, $ttl);
             } else {
